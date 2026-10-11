@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "challenge-06",
+  "version": "1.0.0",
+  "title": "Process Watch",
+  "track": "Linux & Bash",
+  "difficulty": "Intermediate",
+  "summary": "Identify and stop one harmless lab process.",
+  "description": "A process is a running program with a process ID (PID). A synthetic heartbeat process is created just for this challenge. Identify it using process inspection, terminate that process, and verify it stopped. Only processes inside this disposable container are in scope.",
+  "learning_objectives": [
+    "Understand a PID",
+    "Inspect processes using ps",
+    "Terminate the intended process",
+    "Verify its state after termination"
+  ],
+  "prerequisites": [
+    "challenge-01"
+  ],
+  "tags": [
+    "processes",
+    "ps",
+    "kill"
+  ],
+  "environment_profile": "linux-basic",
+  "workspace_seed": {
+    "process-notes.txt": "A harmless `sleep` process is started automatically for this mission.\n"
+  },
+  "offline_hints": [
+    {
+      "level": 1,
+      "title": "Think about the concept",
+      "content": "A process can keep running even if the terminal command that started it has finished."
+    },
+    {
+      "level": 2,
+      "title": "Investigate this area",
+      "content": "Inspect `.heartbeat.pid`, then compare that PID with `ps` output and use `kill -0` as a non-destructive liveness check."
+    },
+    {
+      "level": 3,
+      "title": "Guided route",
+      "content": "The PID is saved in `/workspace/.heartbeat.pid`. Use `kill \"$(cat .heartbeat.pid)\"`, then check `kill -0` for that PID and confirm it is no longer running. Do not kill unrelated PIDs."
+    }
+  ],
+  "validation": {
+    "type": "process_stopped",
+    "pid_file": ".heartbeat.pid"
+  },
+  "reset_policy": "reset-workspace-volume",
+  "completion_explanation": "You completed Process Watch. Review the evidence, compare the observed result with the expected state, and explain why it matters in a real defensive workflow.",
+  "optional_extensions": [],
+  "network_requirements": {
+    "mode": "none",
+    "internet_access": false,
+    "description": "No network interface is required for this mission."
+  },
+  "estimated_minutes": 15,
+  "starter_commands": [
+    "pwd",
+    "ls -la"
+  ],
+  "trusted_startup": [
+    [
+      "/bin/bash",
+      "-lc",
+      "nohup sleep 100000 >/dev/null 2>&1 & echo $! > /workspace/.heartbeat.pid"
+    ]
+  ]
+}

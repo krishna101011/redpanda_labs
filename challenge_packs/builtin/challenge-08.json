@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "challenge-08",
+  "version": "1.0.0",
+  "title": "Automate the Routine",
+  "track": "Python",
+  "difficulty": "Intermediate",
+  "summary": "Build a reusable CSV summariser with error handling.",
+  "description": "Complete a small Python utility that reads a CSV file and writes a JSON summary. It should accept command-line arguments, validate input, and report a useful error for malformed data. A starter script is provided; you are expected to improve it.",
+  "learning_objectives": [
+    "Write a function",
+    "Read a CSV file with headers",
+    "Use command-line arguments",
+    "Handle malformed input without a traceback leak"
+  ],
+  "prerequisites": [
+    "challenge-07"
+  ],
+  "tags": [
+    "python",
+    "csv",
+    "argparse",
+    "validation"
+  ],
+  "environment_profile": "linux-basic",
+  "workspace_seed": {
+    "records.csv": "name,department,active\nAri,engineering,true\nBo,operations,true\nCasey,research,false\nDev,engineering,true\n",
+    "summarize.py": "#!/usr/bin/env python3\n\"\"\"Starter: implement the CSV-to-JSON summariser described in README.md.\"\"\"\n# TODO: parse --input and --output arguments (default input is records.csv).\n# TODO: validate required CSV columns: name, department, active.\n# TODO: write records, active, and sorted departments to JSON.\n# TODO: handle a missing or malformed file with a helpful error and non-zero exit.\nraise SystemExit(\"TODO: implement the summariser\")\n"
+  },
+  "offline_hints": [
+    {
+      "level": 1,
+      "title": "Think about the concept",
+      "content": "Separate parsing, summarising, and output writing into small jobs."
+    },
+    {
+      "level": 2,
+      "title": "Investigate this area",
+      "content": "Use `csv.DictReader`, `argparse`, and `try/except` for expected input errors. Review the TODO in `summarize.py`."
+    },
+    {
+      "level": 3,
+      "title": "Guided route",
+      "content": "Run `python3 summarize.py records.csv --output summary.json`. The summary must contain `records: 4`, `active: 3`, and `departments: [\"engineering\", \"operations\", \"research\"]`. Then verify malformed input exits nonzero with a short user-friendly error."
+    }
+  ],
+  "validation": {
+    "type": "json_subset",
+    "path": "summary.json",
+    "expected": {
+      "records": 4,
+      "active": 3,
+      "departments": [
+        "engineering",
+        "operations",
+        "research"
+      ]
+    }
+  },
+  "reset_policy": "reset-workspace-volume",
+  "completion_explanation": "You completed Automate the Routine. Review the evidence, compare the observed result with the expected state, and explain why it matters in a real defensive workflow.",
+  "optional_extensions": [],
+  "network_requirements": {
+    "mode": "none",
+    "internet_access": false,
+    "description": "No network interface is required for this mission."
+  },
+  "estimated_minutes": 30,
+  "starter_commands": [
+    "pwd",
+    "ls -la"
+  ],
+  "trusted_startup": []
+}

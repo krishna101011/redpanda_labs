@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "id": "challenge-10",
+  "version": "1.0.0",
+  "title": "Follow the Request",
+  "track": "Networking",
+  "difficulty": "Intermediate",
+  "summary": "Resolve a synthetic local hostname and inspect HTTP.",
+  "description": "This mission uses a local DNS responder on UDP port 5353 and a local HTTP endpoint. It does not query public DNS. Resolve the training name, check the HTTP response, and record the status.",
+  "learning_objectives": [
+    "Distinguish DNS names from IP addresses",
+    "Use a local DNS simulation",
+    "Inspect HTTP response headers and status",
+    "Keep requests inside the lab"
+  ],
+  "prerequisites": [
+    "challenge-09"
+  ],
+  "tags": [
+    "dns",
+    "http",
+    "headers",
+    "status-codes"
+  ],
+  "environment_profile": "python-network",
+  "workspace_seed": {
+    "network-notes.txt": "Local DNS simulation: 127.0.0.1:5353/UDP. HTTP training target: 127.0.0.1:8080.\n",
+    "training_service.py": "from http.server import BaseHTTPRequestHandler, HTTPServer\nclass Handler(BaseHTTPRequestHandler):\n    def do_GET(self):\n        payload=b\"RedPanda local request target\\n\"\n        self.send_response(200); self.send_header(\"Content-Type\",\"text/plain\"); self.send_header(\"X-Training-Target\",\"local-only\"); self.send_header(\"Content-Length\",str(len(payload))); self.end_headers(); self.wfile.write(payload)\n    def log_message(self, fmt, *args): pass\nHTTPServer((\"127.0.0.1\",8080),Handler).serve_forever()\n",
+    "dns_sim.py": "import socket\n# Minimal DNS simulation: answers A queries for lab.redpanda.test with 127.0.0.1.\ns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); s.bind((\"127.0.0.1\",5353))\nwhile True:\n data,addr=s.recvfrom(2048)\n try:\n  i=12; labels=[]\n  while data[i]:\n   n=data[i]; i+=1; labels.append(data[i:i+n].decode(\"ascii\", \"ignore\")); i+=n\n  i+=1; qtype=int.from_bytes(data[i:i+2],\"big\"); qclass=int.from_bytes(data[i+2:i+4],\"big\"); question=data[12:i+4]\n  if \".\".join(labels)==\"lab.redpanda.test\" and qtype==1 and qclass==1:\n   answer=b\"\\xc0\\x0c\\x00\\x01\\x00\\x01\\x00\\x00\\x00\\x3c\\x00\\x04\\x7f\\x00\\x00\\x01\"; hdr=data[:2]+b\"\\x81\\x80\\x00\\x01\\x00\\x01\\x00\\x00\\x00\\x00\"; s.sendto(hdr+question+answer,addr)\n  else: s.sendto(data[:2]+b\"\\x81\\x83\"+b\"\\x00\\x01\\x00\\x00\\x00\\x00\\x00\\x00\"+data[12:],addr)\n except Exception: pass\n"
+  },
+  "offline_hints": [
+    {
+      "level": 1,
+      "title": "Think about the concept",
+      "content": "DNS is a naming lookup; HTTP is a separate application protocol. This mission simulates the resolver locally."
+    },
+    {
+      "level": 2,
+      "title": "Investigate this area",
+      "content": "Use `dig @127.0.0.1 -p 5353 lab.redpanda.test +short` and `curl -i -H \"Host: lab.redpanda.test\" http://127.0.0.1:8080/`."
+    },
+    {
+      "level": 3,
+      "title": "Guided route",
+      "content": "Create `evidence/request-trace.txt` with `hostname=lab.redpanda.test`, `resolved=127.0.0.1`, and `http_status=200`. The local DNS responder listens on port 5353; the web service listens on 8080."
+    }
+  ],
+  "validation": {
+    "type": "text_lines",
+    "path": "evidence/request-trace.txt",
+    "required_lines": [
+      "hostname=lab.redpanda.test",
+      "resolved=127.0.0.1",
+      "http_status=200"
+    ]
+  },
+  "reset_policy": "reset-workspace-volume",
+  "completion_explanation": "You completed Follow the Request. Review the evidence, compare the observed result with the expected state, and explain why it matters in a real defensive workflow.",
+  "optional_extensions": [],
+  "network_requirements": {
+    "mode": "internal",
+    "internet_access": false,
+    "description": "Private local-only services; no public Internet route."
+  },
+  "estimated_minutes": 25,
+  "starter_commands": [
+    "pwd",
+    "ls -la"
+  ],
+  "trusted_startup": [
+    [
+      "/bin/bash",
+      "-lc",
+      "nohup python3 /workspace/training_service.py >/workspace/service.log 2>&1 &"
+    ],
+    [
+      "/bin/bash",
+      "-lc",
+      "nohup python3 /workspace/dns_sim.py >/workspace/dns.log 2>&1 &"
+    ]
+  ]
+}

@@ -1,0 +1,35 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+# Frontend
+node_modules/
+frontend/dist/
+frontend/coverage/
+# Local state and secrets
+.env
+.env.*
+!.env.example
+*.db
+*.sqlite
+*.sqlite3
+*-wal
+*-shm
+*.log
+*.key
+*.pem
+# User artifacts
+backups/
+workspace-archives/
+tmp/
+coverage.xml
+htmlcov/
+.DS_Store
+.vscode/
+
+# Local runtime files
+.run/*.pid

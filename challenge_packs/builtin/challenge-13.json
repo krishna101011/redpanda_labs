@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "challenge-13",
+  "version": "1.0.0",
+  "title": "Secret or Cipher?",
+  "track": "Security Fundamentals",
+  "difficulty": "Beginner",
+  "summary": "Classify encoding, hashing, and encryption correctly.",
+  "description": "Security terms are not interchangeable. Base64 is a reversible encoding, SHA-256 is a one-way hash function, and encryption is reversible when the correct key is available. Use harmless examples and create a JSON report with the correct classifications.",
+  "learning_objectives": [
+    "Distinguish encoding from encryption",
+    "Explain one-way hashing",
+    "Classify examples accurately",
+    "Produce structured JSON"
+  ],
+  "prerequisites": [
+    "challenge-01"
+  ],
+  "tags": [
+    "encoding",
+    "hashing",
+    "encryption",
+    "sha256"
+  ],
+  "environment_profile": "linux-basic",
+  "workspace_seed": {
+    "examples.json": "{\"base64\":{\"value\":\"aGVsbG8=\",\"kind\":\"encoding\"},\"sha256\":{\"value\":\"2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824\",\"kind\":\"hashing\"},\"fernet\":{\"description\":\"A keyed authenticated encryption example\",\"kind\":\"encryption\"}}\n"
+  },
+  "offline_hints": [
+    {
+      "level": 1,
+      "title": "Think about the concept",
+      "content": "Ask what security property each operation provides and whether a key is needed to reverse it."
+    },
+    {
+      "level": 2,
+      "title": "Investigate this area",
+      "content": "Review `examples.json`; a Base64 string can be decoded, a hash is not intended to be reversed, and encryption requires a key to decrypt."
+    },
+    {
+      "level": 3,
+      "title": "Guided route",
+      "content": "Create `crypto-report.json` with `base64: encoding`, `sha256: hashing`, `fernet: encryption`, and `hash_is_reversible: false`."
+    }
+  ],
+  "validation": {
+    "type": "json_subset",
+    "path": "crypto-report.json",
+    "expected": {
+      "base64": "encoding",
+      "sha256": "hashing",
+      "fernet": "encryption",
+      "hash_is_reversible": false
+    }
+  },
+  "reset_policy": "reset-workspace-volume",
+  "completion_explanation": "Encoding changes representation but does not hide information from someone who can decode it. Hashing maps data to a digest and is not a reversible encryption scheme. Encryption is designed to be reversed by an authorised holder of the decryption key.",
+  "optional_extensions": [],
+  "network_requirements": {
+    "mode": "none",
+    "internet_access": false,
+    "description": "No network interface is required for this mission."
+  },
+  "estimated_minutes": 12,
+  "starter_commands": [
+    "pwd",
+    "ls -la"
+  ],
+  "trusted_startup": []
+}

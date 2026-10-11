@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "id": "challenge-14",
+  "version": "1.0.0",
+  "title": "Incident Trail",
+  "track": "Integrated Capstone",
+  "difficulty": "Advanced",
+  "summary": "Investigate a deterministic synthetic incident and submit evidence.",
+  "description": "A fictional system has a suspicious configuration change, repeated authentication failures, and a file with an incorrect mode. Investigate the supplied files, independently verify the permission and event counts, and produce `incident-report.json` with evidence and remediation.",
+  "learning_objectives": [
+    "Discover relevant files",
+    "Inspect and correct file permissions",
+    "Correlate synthetic log events",
+    "Create a structured incident report"
+  ],
+  "prerequisites": [
+    "challenge-04",
+    "challenge-05",
+    "challenge-07"
+  ],
+  "tags": [
+    "incident-response",
+    "evidence",
+    "correlation",
+    "python"
+  ],
+  "environment_profile": "linux-basic",
+  "workspace_seed": {
+    "incident/events.log": "2026-05-11T11:00Z AUTH_FAIL account=ops\n2026-05-11T11:01Z CONFIG_CHANGE path=/etc/app.conf\n2026-05-11T11:03Z AUTH_FAIL account=ops\n2026-05-11T11:04Z AUTH_FAIL account=service\n2026-05-11T11:05Z HEALTH status=ok\n",
+    "incident/restore-plan.txt": "Synthetic incident response restore plan.\n",
+    "incident/context.txt": "All names and events in this mission are fictional. Confirm evidence before drawing conclusions.\n"
+  },
+  "offline_hints": [
+    {
+      "level": 1,
+      "title": "Think about the concept",
+      "content": "Use an incident-response approach: preserve observations, verify each claim, and distinguish evidence from assumptions."
+    },
+    {
+      "level": 2,
+      "title": "Investigate this area",
+      "content": "Inspect `incident/`, run counts over its synthetic logs, and examine the mode on `incident/restore-plan.txt`."
+    },
+    {
+      "level": 3,
+      "title": "Guided route",
+      "content": "Correct `incident/restore-plan.txt` to mode 640. Write `incident-report.json` containing `failed_logins: 3`, `config_changes: 1`, `permission_mode: \"640\"`, and `remediation: \"rotate credentials and review config change\"`."
+    }
+  ],
+  "validation": {
+    "type": "json_subset",
+    "path": "incident-report.json",
+    "expected": {
+      "failed_logins": 3,
+      "config_changes": 1,
+      "permission_mode": "640",
+      "remediation": "rotate credentials and review config change"
+    }
+  },
+  "reset_policy": "reset-workspace-volume",
+  "completion_explanation": "You completed Incident Trail. Review the evidence, compare the observed result with the expected state, and explain why it matters in a real defensive workflow.",
+  "optional_extensions": [],
+  "network_requirements": {
+    "mode": "none",
+    "internet_access": false,
+    "description": "No network interface is required for this mission."
+  },
+  "estimated_minutes": 45,
+  "starter_commands": [
+    "pwd",
+    "ls -la"
+  ],
+  "trusted_startup": [],
+  "workspace_modes": {
+    "incident/restore-plan.txt": "600"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "challenge-02",
+  "version": "1.0.0",
+  "title": "The Hidden Trail",
+  "track": "Linux & Bash",
+  "difficulty": "Beginner",
+  "summary": "Find a clue tucked into a hidden directory.",
+  "description": "Linux filenames that begin with a dot are hidden from an ordinary `ls` listing. Follow the directory tree and inspect the clue without changing the supplied evidence. Write the clue into `.evidence/hidden-trail.txt`.",
+  "learning_objectives": [
+    "Navigate relative and absolute paths",
+    "Find hidden entries",
+    "Use find to locate a nested clue",
+    "Create a verifiable evidence file"
+  ],
+  "prerequisites": [
+    "challenge-01"
+  ],
+  "tags": [
+    "directories",
+    "hidden-files",
+    "find"
+  ],
+  "environment_profile": "linux-basic",
+  "workspace_seed": {
+    ".cache/field/route.txt": "PATH-ORCHID-47\n",
+    "README.txt": "Hidden files and nested paths practice.\n"
+  },
+  "offline_hints": [
+    {
+      "level": 1,
+      "title": "Think about the concept",
+      "content": "A file can be present even when a plain directory listing does not show it."
+    },
+    {
+      "level": 2,
+      "title": "Investigate this area",
+      "content": "Try `ls -la`, `find . -type f`, and inspect the directories you discover."
+    },
+    {
+      "level": 3,
+      "title": "Guided route",
+      "content": "The clue is in `.cache/field/route.txt`. Copy its single clue line into `.evidence/hidden-trail.txt`, creating the `.evidence` directory first. The clue text is `PATH-ORCHID-47`."
+    }
+  ],
+  "validation": {
+    "type": "text_lines",
+    "path": ".evidence/hidden-trail.txt",
+    "required_lines": [
+      "PATH-ORCHID-47"
+    ]
+  },
+  "reset_policy": "reset-workspace-volume",
+  "completion_explanation": "You completed The Hidden Trail. Review the evidence, compare the observed result with the expected state, and explain why it matters in a real defensive workflow.",
+  "optional_extensions": [],
+  "network_requirements": {
+    "mode": "none",
+    "internet_access": false,
+    "description": "No network interface is required for this mission."
+  },
+  "estimated_minutes": 12,
+  "starter_commands": [
+    "pwd",
+    "ls -la"
+  ],
+  "trusted_startup": []
+}

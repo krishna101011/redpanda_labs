@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "id": "challenge-05",
+  "version": "1.0.0",
+  "title": "Pipeline Puzzle",
+  "track": "Linux & Bash",
+  "difficulty": "Intermediate",
+  "summary": "Transform noisy data with pipes and command-line tools.",
+  "description": "This dataset contains duplicates and irrelevant lines. Use standard input/output, pipes, sorting and unique filtering to write a clean three-line `normalized.txt` file. The validator checks the content, not your shell history.",
+  "learning_objectives": [
+    "Explain stdin, stdout, and redirection",
+    "Compose sort and uniq",
+    "Filter noise and remove duplicates",
+    "Verify output deterministically"
+  ],
+  "prerequisites": [
+    "challenge-03"
+  ],
+  "tags": [
+    "pipes",
+    "redirection",
+    "sort",
+    "uniq"
+  ],
+  "environment_profile": "linux-basic",
+  "workspace_seed": {
+    "events.txt": "INFO: boot complete\nALERT: login_failure\nDEBUG: cache warm\nALERT: config_changed\nALERT: login_failure\nINFO: status green\nALERT: service_restarted\nALERT: service_restarted\n"
+  },
+  "offline_hints": [
+    {
+      "level": 1,
+      "title": "Think about the concept",
+      "content": "Think of each command as a small tool whose output can become another tool’s input."
+    },
+    {
+      "level": 2,
+      "title": "Investigate this area",
+      "content": "Inspect `events.txt`, filter lines beginning with `ALERT`, then sort them and remove duplicates."
+    },
+    {
+      "level": 3,
+      "title": "Guided route",
+      "content": "Create `normalized.txt` containing exactly `ALERT: config_changed`, `ALERT: login_failure`, and `ALERT: service_restarted` in sorted order, one per line. A pipeline using `grep`, `sort`, and `uniq` is one route."
+    }
+  ],
+  "validation": {
+    "type": "exact_file",
+    "path": "normalized.txt",
+    "content": "ALERT: config_changed\nALERT: login_failure\nALERT: service_restarted\n"
+  },
+  "reset_policy": "reset-workspace-volume",
+  "completion_explanation": "You completed Pipeline Puzzle. Review the evidence, compare the observed result with the expected state, and explain why it matters in a real defensive workflow.",
+  "optional_extensions": [],
+  "network_requirements": {
+    "mode": "none",
+    "internet_access": false,
+    "description": "No network interface is required for this mission."
+  },
+  "estimated_minutes": 20,
+  "starter_commands": [
+    "pwd",
+    "ls -la"
+  ],
+  "trusted_startup": []
+}

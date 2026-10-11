@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "id": "challenge-07",
+  "version": "1.0.0",
+  "title": "Log Inspector",
+  "track": "Python",
+  "difficulty": "Beginner",
+  "summary": "Write a Python log parser that emits JSON.",
+  "description": "Use Python to read JSON Lines, loop over records, count selected event types, and write a machine-readable JSON report. The expected output is checked by the backend.",
+  "learning_objectives": [
+    "Run a Python script",
+    "Read JSON Lines",
+    "Use dictionaries and loops",
+    "Write valid JSON output"
+  ],
+  "prerequisites": [
+    "challenge-03"
+  ],
+  "tags": [
+    "python",
+    "json",
+    "loops",
+    "logs"
+  ],
+  "environment_profile": "linux-basic",
+  "workspace_seed": {
+    "events.jsonl": "{\"event\":\"AUTH_FAIL\",\"user\":\"maya\"}\n{\"event\":\"FILE_READ\",\"path\":\"/etc/hosts\"}\n{\"event\":\"AUTH_FAIL\",\"user\":\"maya\"}\n{\"event\":\"INFO\",\"message\":\"health\"}\n{\"event\":\"FILE_READ\",\"path\":\"/var/log/app.log\"}\n{\"event\":\"AUTH_FAIL\",\"user\":\"dev\"}\n"
+  },
+  "offline_hints": [
+    {
+      "level": 1,
+      "title": "Think about the concept",
+      "content": "Treat each line as a separate JSON record and decide what data your loop needs to count."
+    },
+    {
+      "level": 2,
+      "title": "Investigate this area",
+      "content": "Open `events.jsonl`, use `json.loads` for each line, and increment counters for `AUTH_FAIL` and `FILE_READ`."
+    },
+    {
+      "level": 3,
+      "title": "Guided route",
+      "content": "Write `/workspace/report.json` with `{\"auth_failures\": 3, \"file_reads\": 2}`. Keep it valid JSON; test by running `python3 -m json.tool report.json`."
+    }
+  ],
+  "validation": {
+    "type": "json_subset",
+    "path": "report.json",
+    "expected": {
+      "auth_failures": 3,
+      "file_reads": 2
+    }
+  },
+  "reset_policy": "reset-workspace-volume",
+  "completion_explanation": "You completed Log Inspector. Review the evidence, compare the observed result with the expected state, and explain why it matters in a real defensive workflow.",
+  "optional_extensions": [],
+  "network_requirements": {
+    "mode": "none",
+    "internet_access": false,
+    "description": "No network interface is required for this mission."
+  },
+  "estimated_minutes": 25,
+  "starter_commands": [
+    "pwd",
+    "ls -la"
+  ],
+  "trusted_startup": []
+}

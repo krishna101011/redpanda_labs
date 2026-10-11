@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "challenge-03",
+  "version": "1.0.0",
+  "title": "Text Detective",
+  "track": "Linux & Bash",
+  "difficulty": "Beginner",
+  "summary": "Filter synthetic logs into a compact evidence note.",
+  "description": "Logs are records of events. The exercise dataset is synthetic and deliberately small. Search for authentication failures and the successful administrator event, then create `evidence/log-findings.txt` with verified counts.",
+  "learning_objectives": [
+    "Read a text dataset",
+    "Use grep to search for patterns",
+    "Recognise relevant versus irrelevant events",
+    "Record findings independently"
+  ],
+  "prerequisites": [
+    "challenge-02"
+  ],
+  "tags": [
+    "logs",
+    "grep",
+    "text-search"
+  ],
+  "environment_profile": "linux-basic",
+  "workspace_seed": {
+    "logs/auth.log": "2026-04-01T08:01:00Z INFO service started\n2026-04-01T08:02:10Z AUTH_FAIL user=maya source=10.0.0.8\n2026-04-01T08:03:11Z AUTH_FAIL user=maya source=10.0.0.8\n2026-04-01T08:04:13Z INFO healthcheck ok\n2026-04-01T08:05:40Z ADMIN_LOGIN user=ops source=10.0.0.9\n2026-04-01T08:07:01Z AUTH_FAIL user=dev source=10.0.0.4\n"
+  },
+  "offline_hints": [
+    {
+      "level": 1,
+      "title": "Think about the concept",
+      "content": "Treat this as a filtering exercise: first understand the log format, then narrow it to relevant event types."
+    },
+    {
+      "level": 2,
+      "title": "Investigate this area",
+      "content": "Read `logs/auth.log`, then combine `grep` with `wc -l` or inspect matching lines directly."
+    },
+    {
+      "level": 3,
+      "title": "Guided route",
+      "content": "Create `evidence/log-findings.txt` with lines `failed_login=3` and `admin_login=1`. The source log includes exactly three `AUTH_FAIL` entries and one `ADMIN_LOGIN` entry."
+    }
+  ],
+  "validation": {
+    "type": "text_lines",
+    "path": "evidence/log-findings.txt",
+    "required_lines": [
+      "failed_login=3",
+      "admin_login=1"
+    ]
+  },
+  "reset_policy": "reset-workspace-volume",
+  "completion_explanation": "You completed Text Detective. Review the evidence, compare the observed result with the expected state, and explain why it matters in a real defensive workflow.",
+  "optional_extensions": [],
+  "network_requirements": {
+    "mode": "none",
+    "internet_access": false,
+    "description": "No network interface is required for this mission."
+  },
+  "estimated_minutes": 15,
+  "starter_commands": [
+    "pwd",
+    "ls -la"
+  ],
+  "trusted_startup": []
+}

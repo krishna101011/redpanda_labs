@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "id": "challenge-15",
+  "version": "1.0.0",
+  "title": "The Local Lab Audit",
+  "track": "Integrated Capstone",
+  "difficulty": "Advanced",
+  "summary": "Audit a controlled local service and deliver actionable findings.",
+  "description": "Combine local service investigation, HTTP inspection, vulnerable input handling, access-control reasoning, and security concept classification. Submit a report with evidence, impact, and remediation. All targets and records are synthetic, remain inside the local lab container, and require no external systems.",
+  "learning_objectives": [
+    "Verify a local service and request path",
+    "Identify input-handling risk",
+    "Identify missing object-level authorization",
+    "Classify encoding, hashing, and encryption",
+    "Produce a structured audit report"
+  ],
+  "prerequisites": [
+    "challenge-10",
+    "challenge-11",
+    "challenge-12",
+    "challenge-13"
+  ],
+  "tags": [
+    "audit",
+    "http",
+    "web-security",
+    "reporting"
+  ],
+  "environment_profile": "python-network",
+  "workspace_seed": {
+    "audit-target/README.txt": "Synthetic combined target notes. Local service: http://127.0.0.1:8080. Input demo: /search?q=NAME. Access-control demo: /record?id=1002.\n",
+    "audit-target/app.py": "from http.server import BaseHTTPRequestHandler, HTTPServer\nfrom urllib.parse import urlparse,parse_qs\nimport json, sqlite3\nDB='/workspace/audit-target.sqlite'\ncon=sqlite3.connect(DB); con.execute('CREATE TABLE IF NOT EXISTS people (id INTEGER, name TEXT, role TEXT)'); con.execute('DELETE FROM people'); con.executemany('INSERT INTO people VALUES (?,?,?)',[(1,'Mira','analyst'),(2,'Noah','operator'),(3,'Isha','researcher')]); con.commit(); con.close()\nRECORDS={1001:{'id':1001,'owner':'fictional-user-a','memo':'Demo schedule'},1002:{'id':1002,'owner':'fictional-user-b','memo':'Demo contact list'}}\nclass Handler(BaseHTTPRequestHandler):\n def do_GET(self):\n  p=urlparse(self.path)\n  if p.path=='/health': body=b'{\"service\":\"audit-demo\",\"status\":\"ready\"}'; self.send_response(200)\n  elif p.path=='/search':\n   q=parse_qs(p.query).get('q',[''])[0]; con=sqlite3.connect(DB)\n   try: rows=con.execute(\"SELECT id,name,role FROM people WHERE name LIKE '%\"+q+\"%'\").fetchall(); body=json.dumps({'results':[{'id':r[0],'name':r[1],'role':r[2]} for r in rows]}).encode(); self.send_response(200)\n   except Exception: body=b'{\"error\":\"query failed\"}'; self.send_response(400)\n   finally: con.close()\n  elif p.path=='/record':\n   try: record=RECORDS[int(parse_qs(p.query).get('id',['0'])[0])]; body=json.dumps(record).encode(); self.send_response(200)\n   except Exception: body=b'{\"error\":\"not found\"}'; self.send_response(404)\n  else: body=b'{\"error\":\"not found\"}'; self.send_response(404)\n  self.send_header('Content-Type','application/json'); self.send_header('Content-Length',str(len(body))); self.end_headers(); self.wfile.write(body)\n def log_message(self,*a): pass\nHTTPServer(('127.0.0.1',8080),Handler).serve_forever()\n"
+  },
+  "offline_hints": [
+    {
+      "level": 1,
+      "title": "Think about the concept",
+      "content": "Use an audit structure: finding, evidence, impact, remediation. Verify each observation against the synthetic application before writing the report."
+    },
+    {
+      "level": 2,
+      "title": "Investigate this area",
+      "content": "Review `audit-target/` and query the local service on 127.0.0.1:8080. The manifest notes which two security behaviours the demo intentionally illustrates."
+    },
+    {
+      "level": 3,
+      "title": "Guided route",
+      "content": "Write `audit-report.json` with `service_verified: true`, `input_handling: \"unsafe_sql_query\"`, `access_control: \"missing_object_authorization\"`, `base64: \"encoding\"`, `sha256: \"hashing\"`, and a non-empty `remediation` string."
+    }
+  ],
+  "validation": {
+    "type": "json_subset",
+    "path": "audit-report.json",
+    "expected": {
+      "service_verified": true,
+      "input_handling": "unsafe_sql_query",
+      "access_control": "missing_object_authorization",
+      "base64": "encoding",
+      "sha256": "hashing"
+    }
+  },
+  "reset_policy": "reset-workspace-volume",
+  "completion_explanation": "You completed The Local Lab Audit. Review the evidence, compare the observed result with the expected state, and explain why it matters in a real defensive workflow.",
+  "optional_extensions": [],
+  "network_requirements": {
+    "mode": "internal",
+    "internet_access": false,
+    "description": "Private local-only services; no public Internet route."
+  },
+  "estimated_minutes": 50,
+  "starter_commands": [
+    "pwd",
+    "ls -la"
+  ],
+  "trusted_startup": [
+    [
+      "/bin/bash",
+      "-lc",
+      "nohup python3 /workspace/audit-target/app.py >/workspace/audit-target.log 2>&1 &"
+    ]
+  ]
+}

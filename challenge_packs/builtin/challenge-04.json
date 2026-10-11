@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "challenge-04",
+  "version": "1.0.0",
+  "title": "Permission Denied",
+  "track": "Linux & Bash",
+  "difficulty": "Beginner",
+  "summary": "Inspect and correct a file permission mode.",
+  "description": "Permissions define which users may read, write, or execute a file. The `briefing.txt` file starts with intentionally restrictive permissions. Use `stat` or `ls -l` to inspect the mode, then set it to owner read/write and group read (`640`).",
+  "learning_objectives": [
+    "Read symbolic and octal permission modes",
+    "Use chmod on one specific file",
+    "Verify permission bits and ownership"
+  ],
+  "prerequisites": [
+    "challenge-02"
+  ],
+  "tags": [
+    "permissions",
+    "chmod",
+    "ownership"
+  ],
+  "environment_profile": "linux-basic",
+  "workspace_seed": {
+    "locked/briefing.txt": "This briefing is synthetic lab material. Correct access mode: owner rw, group r, others none.\n"
+  },
+  "offline_hints": [
+    {
+      "level": 1,
+      "title": "Think about the concept",
+      "content": "First inspect the file mode; do not guess what the three digit groups mean."
+    },
+    {
+      "level": 2,
+      "title": "Investigate this area",
+      "content": "Use `ls -l locked/briefing.txt` or `stat`. The target mode is 640, meaning owner rw, group r, others none."
+    },
+    {
+      "level": 3,
+      "title": "Guided route",
+      "content": "Run `chmod 640 locked/briefing.txt`, then verify using `stat -c %a locked/briefing.txt`. The validator checks the real mode and expected owner."
+    }
+  ],
+  "validation": {
+    "type": "file_mode",
+    "path": "locked/briefing.txt",
+    "mode": "640",
+    "owner": "redpanda"
+  },
+  "reset_policy": "reset-workspace-volume",
+  "completion_explanation": "You completed Permission Denied. Review the evidence, compare the observed result with the expected state, and explain why it matters in a real defensive workflow.",
+  "optional_extensions": [],
+  "network_requirements": {
+    "mode": "none",
+    "internet_access": false,
+    "description": "No network interface is required for this mission."
+  },
+  "estimated_minutes": 12,
+  "starter_commands": [
+    "pwd",
+    "ls -la"
+  ],
+  "trusted_startup": [],
+  "workspace_modes": {
+    "locked/briefing.txt": "600"
+  }
+}

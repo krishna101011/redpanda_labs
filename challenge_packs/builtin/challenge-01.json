@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "challenge-01",
+  "version": "1.0.0",
+  "title": "First Contact",
+  "track": "Linux & Bash",
+  "difficulty": "Beginner",
+  "summary": "Learn your bearings in a Bash workspace.",
+  "description": "A terminal is a text interface for asking the operating system to do work. Bash reads commands; it is not the operating system itself. Explore the current directory, identify the lab user, inspect the supplied files, then write the observed facts to `mission-report.txt`.",
+  "learning_objectives": [
+    "Print your working directory",
+    "Identify the current user",
+    "List the starter files",
+    "Create a report with the observed facts"
+  ],
+  "prerequisites": [],
+  "tags": [
+    "terminal",
+    "paths",
+    "pwd",
+    "whoami",
+    "ls"
+  ],
+  "environment_profile": "linux-basic",
+  "workspace_seed": {
+    "field-notes.txt": "RedPanda Labs workspace orientation notes.\n",
+    "starter.txt": "Start with pwd, whoami, and ls -la.\n"
+  },
+  "offline_hints": [
+    {
+      "level": 1,
+      "title": "Think about the concept",
+      "content": "Start by asking the shell where you are and which user it is running as."
+    },
+    {
+      "level": 2,
+      "title": "Investigate this area",
+      "content": "Use `pwd`, `whoami`, and `ls -la`. Put the results into a small text report in `/workspace`."
+    },
+    {
+      "level": 3,
+      "title": "Guided route",
+      "content": "Create `/workspace/mission-report.txt` with separate lines `location=/workspace`, `user=redpanda`, and `files=field-notes.txt,starter.txt` (the exact file names, sorted alphabetically). Verify it with `cat`."
+    }
+  ],
+  "validation": {
+    "type": "text_lines",
+    "path": "mission-report.txt",
+    "required_lines": [
+      "location=/workspace",
+      "user=redpanda",
+      "files=field-notes.txt,starter.txt"
+    ]
+  },
+  "reset_policy": "reset-workspace-volume",
+  "completion_explanation": "The report is checked from the actual workspace file, not from a button click. `pwd` reports a path, `whoami` reports the effective user, and `ls` inventories directory entries. This is the foundation of nearly every terminal investigation.",
+  "optional_extensions": [],
+  "network_requirements": {
+    "mode": "none",
+    "internet_access": false,
+    "description": "No network interface is required for this mission."
+  },
+  "estimated_minutes": 10,
+  "starter_commands": [
+    "pwd",
+    "ls -la"
+  ],
+  "trusted_startup": []
+}
